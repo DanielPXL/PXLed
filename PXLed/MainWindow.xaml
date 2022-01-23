@@ -7,6 +7,46 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="15"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
 
+        <local:LEDPreviewControl x:Name="ledPreview" LEDCount="50"/>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <ScrollViewer Grid.Column="0">
+                <StackPanel x:Name="controllerButtons">
+
+                </StackPanel>
+            </ScrollViewer>
+
+            <GroupBox x:Name="controllerContentBox" Grid.Column="1" Grid.Row="0" Margin="5">
+
+            </GroupBox>
+
+            <Grid Grid.Column="1" Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="110"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0">Brightness</Label>
+                <Slider x:Name="brightnessSlider" Minimum="0" Maximum="1" Grid.Column="1" VerticalAlignment="Center"/>
+
+                <Label x:Name="fpsLabel" Grid.Column="2">FPS: 60 / Max: 60</Label>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>
