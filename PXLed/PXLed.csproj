@@ -5,9 +5,11 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <StartupObject>PXLed.App</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.IO.Ports" Version="6.0.0" />
     <PackageReference Include="System.Text.Json" Version="6.0.1" />
   </ItemGroup>
 
