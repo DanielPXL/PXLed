@@ -35,15 +35,15 @@ namespace PXLed
             index++;
             index %= 2;
 
-            //for (int i = 0; i < leds.Length; i++)
-            //{
-            //    leds[i] = Color24.FromHSV(i * 10d + time * 30f, 1d, 1d);
-            //}
-
             for (int i = 0; i < leds.Length; i++)
             {
-                leds[i] = Color24.FromHSV(0d, 0d, index);
+                leds[i] = Color24.FromHSV(i * 10d + time * 30f, 1d, 1d);
             }
+
+            //for (int i = 0; i < leds.Length; i++)
+            //{
+            //    leds[i] = Color24.FromHSV(0d, 0d, index);
+            //}
         }
 
         public object GetData()

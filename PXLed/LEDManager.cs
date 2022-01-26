@@ -10,11 +10,12 @@ namespace PXLed
 {
     public class LEDManager
     {
-        public LEDManager(int ledCount, ArduinoConnection arduino, LEDPreviewControl preview)
+        public LEDManager(int ledCount, ArduinoConnection arduino, LEDPreviewControl preview, FPSCounter fpsCounter = null)
         {
             colors = new Color24[ledCount];
             this.arduino = arduino;
             this.preview = preview;
+            this.fpsCounter = fpsCounter;
         }
 
         public ILEDEffect? CurrentEffect { get; private set; }
@@ -23,6 +24,7 @@ namespace PXLed
 
         private readonly ArduinoConnection arduino;
         private readonly LEDPreviewControl preview;
+        private readonly FPSCounter? fpsCounter;
         private Thread? renderThread;
 
         public void StartEffect(ILEDEffect effect)
@@ -45,6 +47,9 @@ namespace PXLed
 
             while (renderThread!.IsAlive && CurrentEffect != null)
             {
+                fpsCounter?.StopFrame();
+                fpsCounter?.StartFrame();
+
                 // Record last frame's time and current frame's time for delta time
                 last = now;
                 now = Environment.TickCount;
