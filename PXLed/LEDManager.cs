@@ -40,29 +40,27 @@ namespace PXLed
             }
         }
 
+        // Very much inspired by https://gamedev.stackexchange.com/a/69769
         void EffectLoop()
         {
-            int now = Environment.TickCount;
-            int last;
+            int now;
+            int last = Environment.TickCount;
 
             while (renderThread!.IsAlive && CurrentEffect != null)
             {
+                // Do stuff with the fps counter in order to record the fps correctly for displaying
                 fpsCounter?.StopFrame();
                 fpsCounter?.StartFrame();
 
-                // Record last frame's time and current frame's time for delta time
-                last = now;
+                float optimalTime = 1000f / CurrentEffect.MaxFPS;
+             
                 now = Environment.TickCount;
-
-                // Wait until next frame has to be rendered (determined by MaxFPS property on effect)
-                int timeToWait = (int)Math.Round((1000f / CurrentEffect.MaxFPS) - (now - last));
-                if (timeToWait > 0)
-                {
-                    Thread.Sleep(timeToWait);
-                }
+                int updateLength = now - last;
+                float delta = updateLength / 1000f;
+                last = now;
 
                 // Execute effect
-                CurrentEffect.Update(ref colors, (now - last) / 1000f);
+                CurrentEffect.Update(ref colors, delta);
 
                 // Send new colors to LEDs
                 arduino.SendColorArray(ref colors, 0.4f);
@@ -77,6 +75,12 @@ namespace PXLed
                     // Don't really know why but MainWindow closing causes this exception to throw
                     // Because the MainWindow is closing and the process is being stopped, break so that the thread exits cleanly
                     break;
+                }
+
+                int sleepTime = last - Environment.TickCount + (int)optimalTime;
+                if (sleepTime > 0)
+                {
+                    Thread.Sleep(sleepTime);
                 }
             }
         }
