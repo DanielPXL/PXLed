@@ -10,10 +10,10 @@ namespace PXLed
 {
     public class LEDManager
     {
-        public LEDManager(int ledCount, ArduinoConnection arduino, LEDPreviewControl preview, FPSCounter fpsCounter = null)
+        public LEDManager(int ledCount, ILEDDevice ledDevice, LEDPreviewControl preview, FPSCounter? fpsCounter = null)
         {
             colors = new Color24[ledCount];
-            this.arduino = arduino;
+            this.ledDevice = ledDevice;
             this.preview = preview;
             this.fpsCounter = fpsCounter;
         }
@@ -22,7 +22,7 @@ namespace PXLed
 
         public Color24[] colors;
 
-        private readonly ArduinoConnection arduino;
+        private readonly ILEDDevice ledDevice;
         private readonly LEDPreviewControl preview;
         private readonly FPSCounter? fpsCounter;
         private Thread? renderThread;
@@ -63,7 +63,7 @@ namespace PXLed
                 CurrentEffect.Update(ref colors, delta);
 
                 // Send new colors to LEDs
-                arduino.SendColorArray(ref colors, 0.4f);
+                ledDevice.SendColors(ref colors, 0.4f);
 
                 try
                 {
@@ -73,6 +73,7 @@ namespace PXLed
                 } catch (TaskCanceledException)
                 {
                     // Don't really know why but MainWindow closing causes this exception to throw
+
                     // Because the MainWindow is closing and the process is being stopped, break so that the thread exits cleanly
                     break;
                 }

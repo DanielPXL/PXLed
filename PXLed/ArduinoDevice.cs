@@ -11,14 +11,15 @@ namespace PXLed
     /// <summary>
     /// Connection to an Arduino using SerialPorts
     /// </summary>
-    public class ArduinoConnection : IDisposable
+    public class ArduinoDevice : ILEDDevice, IDisposable
     {
         public const byte START_BYTE = 254;
         public const byte STOP_BYTE = 255;
         public const byte ACKNOWLEDGE_BYTE = 100;
 
-        public ArduinoConnection(string portName, int baudRate)
+        public ArduinoDevice(string portName, int baudRate)
         {
+            // Read buffer for receiving acknowledgement byte
             readBuffer = new byte[1];
 
             // Try to open new SerialPort to and connect to Arduino
@@ -35,7 +36,7 @@ namespace PXLed
         private readonly SerialPort? port;
         private readonly byte[] readBuffer;
 
-        public void SendColorArray(ref Color24[] colors, float brightness)
+        public void SendColors(ref Color24[] colors, float brightness)
         {
             // Array length = rgb count + start byte + stop byte
             byte[] byteArray = new byte[colors.Length * 3 + 2];

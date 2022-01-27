@@ -11,7 +11,7 @@ namespace PXLed
             FPSCounter fpsCounter = new FPSCounter((float fps) => fpsLabel.Dispatcher.Invoke(() => DisplayFPS(fps)));
 
             // Initialize LED Manager
-            LEDManager ledManager = new(91, new ArduinoConnection("COM3", 230400), ledPreview, fpsCounter);
+            LEDManager ledManager = new(91, new ArduinoDevice("COM3", 230400), ledPreview, fpsCounter);
 
             // Start SettingsEffect for testing
             // TODO: Implement actual effect switching and plugin loading
