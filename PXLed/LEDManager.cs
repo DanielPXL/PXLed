@@ -12,7 +12,7 @@ namespace PXLed
 {
     public class LEDManager
     {
-        public LEDManager(int ledCount, ILEDDevice ledDevice, LEDPreviewControl preview, FPSCounter? fpsCounter = null)
+        public LEDManager(int ledCount, ILEDDevice ledDevice, LEDPreviewControl? preview = null, FPSCounter? fpsCounter = null)
         {
             colors = new Color24[ledCount];
             this.ledDevice = ledDevice;
@@ -25,7 +25,7 @@ namespace PXLed
         public Color24[] colors;
 
         private readonly ILEDDevice ledDevice;
-        private readonly LEDPreviewControl preview;
+        private readonly LEDPreviewControl? preview;
         private readonly FPSCounter? fpsCounter;
         private Thread? renderThread;
 
@@ -71,7 +71,7 @@ namespace PXLed
                 {
                     // Send new colors to the preview
                     // Execute on UI thread in order to prevent an exception
-                    preview.Dispatcher.Invoke(() => preview.SetColors(ref colors));
+                    preview?.Dispatcher.Invoke(() => preview.SetColors(ref colors));
                 } catch (TaskCanceledException)
                 {
                     // Don't really know why but MainWindow closing causes this exception to throw
