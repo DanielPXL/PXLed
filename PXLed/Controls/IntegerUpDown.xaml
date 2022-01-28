@@ -1,0 +1,28 @@
+﻿<UserControl x:Class="PXLed.Controls.IntegerUpDown"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PXLed.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="20" d:DesignWidth="80"
+             Height="20">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBox x:Name="textBox" Grid.Column="0"></TextBox>
+
+        <Grid Grid.Column="1" Width="20">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Button x:Name="upButton" Grid.Row="0" FontSize="6">▲</Button>
+            <Button x:Name="downButton" Grid.Row="1" FontSize="6">▼</Button>
+        </Grid>
+    </Grid>
+</UserControl>

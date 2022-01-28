@@ -1,5 +1,6 @@
 ﻿using PXLed.Devices;
 using PXLed.Effects;
+using PXLed.Controls;
 using System.Windows;
 
 namespace PXLed

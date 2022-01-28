@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
-namespace PXLed
+namespace PXLed.Controls
 {
     /// <summary>
     /// Displays a horizontal preview of LEDs using colored rectangles.

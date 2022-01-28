@@ -1,4 +1,5 @@
-﻿using PXLed.Devices;
+﻿using PXLed.Controls;
+using PXLed.Devices;
 using PXLed.Effects;
 using System;
 using System.Collections.Generic;

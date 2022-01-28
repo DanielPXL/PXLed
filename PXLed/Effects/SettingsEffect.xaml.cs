@@ -48,7 +48,7 @@ namespace PXLed.Effects
 
         public object GetData()
         {
-            throw new NotImplementedException();
+            return new SettingsData() { numLeds = 50};
         }
 
         public void SetData(object data)
@@ -57,5 +57,9 @@ namespace PXLed.Effects
         }
     }
 
-
+    public struct SettingsData
+    {
+        public float brightness = 0.4f;
+        public int numLeds = 100;
+    }
 }
