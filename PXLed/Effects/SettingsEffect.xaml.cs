@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace PXLed
+namespace PXLed.Effects
 {
     public partial class SettingsEffect : UserControl, ILEDEffect
     {
@@ -55,6 +55,7 @@ namespace PXLed
         {
             throw new NotImplementedException();
         }
-
     }
+
+
 }

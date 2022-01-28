@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.IO.Ports;
 using System.Threading;
 
-namespace PXLed
+namespace PXLed.Devices
 {
     /// <summary>
     /// Connection to an Arduino using SerialPorts

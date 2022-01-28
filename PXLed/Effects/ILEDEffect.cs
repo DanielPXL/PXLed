@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
-namespace PXLed
+namespace PXLed.Effects
 {
     public interface ILEDEffect
     {
