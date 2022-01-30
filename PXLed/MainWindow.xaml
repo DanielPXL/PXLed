@@ -27,12 +27,12 @@
             </Grid.RowDefinitions>
 
             <ScrollViewer Grid.Column="0">
-                <StackPanel x:Name="controllerButtons">
+                <StackPanel x:Name="effectButtonPanel">
 
                 </StackPanel>
             </ScrollViewer>
 
-            <GroupBox x:Name="controllerContentBox" Grid.Column="1" Grid.Row="0" Margin="5">
+            <GroupBox x:Name="effectContentBox" Grid.Column="1" Grid.Row="0" Margin="5">
 
             </GroupBox>
 

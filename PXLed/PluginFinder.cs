@@ -18,7 +18,7 @@ namespace PXLed
         /// <returns>Returns an initialized array of all found effects.</returns>
         /// <exception cref="DirectoryNotFoundException"></exception>
         /// <exception cref="NotImplementedException"></exception>
-        public static LEDEffectData[] FindEffects(string? directory = null)
+        public static List<LEDEffectData> FindEffects(string? directory = null)
         {
             if (directory == null)
                 directory = Environment.CurrentDirectory;
@@ -58,7 +58,7 @@ namespace PXLed
                 }
             }
 
-            return effects.ToArray();
+            return effects;
         }
     }
 }
