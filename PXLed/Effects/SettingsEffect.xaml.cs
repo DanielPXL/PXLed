@@ -53,7 +53,8 @@ namespace PXLed.Effects
 
         public void SetData(object data)
         {
-            throw new NotImplementedException();
+            SettingsData settingsData = (SettingsData)data;
+
         }
     }
 

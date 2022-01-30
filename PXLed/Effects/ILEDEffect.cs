@@ -9,9 +9,6 @@ namespace PXLed.Effects
 {
     public interface ILEDEffect
     {
-        public string DisplayName { get; }
-        public float MaxFPS { get; }
-
         public void Update(ref Color24[] leds, float deltaTime);
 
         // Save data for config
