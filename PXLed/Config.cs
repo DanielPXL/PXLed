@@ -19,18 +19,18 @@ namespace PXLed
 
         public string FileName { get; }
 
-        Dictionary<string, object>? dataDictionary;
+        Dictionary<string, JObject>? dataDictionary;
 
         public T GetData<T>()
         {
             // JSON property name is equal to actual class name
             // This makes it so that there can only be one of every class per config file
-            string key = typeof(T).AssemblyQualifiedName!;
+            string key = typeof(T).FullName!;
 
             // Return the property if it's in the config already, otherwise, return a new instance of the property
             if (dataDictionary!.ContainsKey(key))
             {
-                return (T)dataDictionary[key];
+                return dataDictionary[key].ToObject<T>()!;
             } else
             {
                 return Activator.CreateInstance<T>();
@@ -41,41 +41,28 @@ namespace PXLed
         {
             // JSON property name is equal to actual class name
             // This makes it so that there can only be one of every class per config file
-            string key = typeof(T).AssemblyQualifiedName!;
+            string key = typeof(T).FullName!;
 
             // Overwrite property if already in config, otherwise, add it to config.
             if (dataDictionary!.ContainsKey(key))
             {
-                dataDictionary[key] = data!;
+                dataDictionary[key] = JObject.FromObject(data!);
             } else
             {
-                dataDictionary.Add(key, data!);
+                dataDictionary.Add(key, JObject.FromObject(data!));
             }
         }
 
         public void Load()
         {
-            dataDictionary = new Dictionary<string, object>();
+            dataDictionary = new Dictionary<string, JObject>();
 
             // Create new empty data dictionary
             // Populate it with data from config file if it exists
             if (File.Exists(FileName))
             {
                 string json = File.ReadAllText(FileName);
-                Dictionary<string, object>? jsonContent = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
-                foreach (KeyValuePair<string, object> kvp in jsonContent!)
-                {
-                    Type? type = Type.GetType(kvp.Key);
-                    if (type != null)
-                    {
-                        JObject jsonObject = (JObject)kvp.Value;
-                        object? savedValue = jsonObject.ToObject(type);
-                        if (savedValue != null)
-                        {
-                            dataDictionary![kvp.Key] = savedValue;
-                        }
-                    }
-                }
+                dataDictionary = JsonConvert.DeserializeObject<Dictionary<string, JObject>>(json);
             }
         }
 
