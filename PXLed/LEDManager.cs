@@ -21,7 +21,7 @@ namespace PXLed
             this.fpsCounter = fpsCounter;
         }
 
-        public ILEDEffect? CurrentEffect { get; private set; }
+        public LEDEffectData? CurrentEffect { get; private set; }
 
         public Color24[] colors;
 
@@ -30,7 +30,7 @@ namespace PXLed
         private readonly FPSCounter? fpsCounter;
         private Thread? renderThread;
 
-        public void StartEffect(ILEDEffect effect)
+        public void StartEffect(LEDEffectData effect)
         {
             // Set current effect so that the render thread switches to new effect
             CurrentEffect = effect;
@@ -63,7 +63,7 @@ namespace PXLed
                 last = now;
 
                 // Execute effect
-                CurrentEffect.Update(ref colors, delta);
+                CurrentEffect.Effect.Update(ref colors, delta);
 
                 // Send new colors to LEDs
                 ledDevice.SendColors(ref colors, 0.4f);

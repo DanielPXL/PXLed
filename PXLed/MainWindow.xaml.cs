@@ -15,20 +15,26 @@ namespace PXLed
             InitializeComponent();
 
             fpsCounter = new();
+            // TODO: Make Arduino device settings changeable through settings
             ledManager = new(91, new ArduinoDevice("COM3", 230400), ledPreview, fpsCounter);
 
+            // Get all available effects and make buttons that select them for each of them
             effects = GetEffects();
             MakeEffectButtons();
+
+            // TODO: Save last used effect in config
+            SetCurrentEffect(effects[0]);
         }
 
         FPSCounter fpsCounter;
         LEDManager ledManager;
 
         LEDEffectData[] effects;
-        int currentEffect;
+        LEDEffectData? currentEffect;
 
         LEDEffectData[] GetEffects()
         {
+            // SettingsEffect is added manually to ensure that it is placed first in the button list
             SettingsEffect settingsEffect = new();
             LEDEffectData settingsEffectData = new(settingsEffect.DisplayName, settingsEffect.MaxFPS, settingsEffect);
 
@@ -38,27 +44,60 @@ namespace PXLed
 
         void MakeEffectButtons()
         {
+            // Clear buttons if this is not the first time calling the function
+            effectButtonPanel.Children.Clear();
+
             for (int i = 0; i < effects.Length; i++)
             {
+                // Make button
                 Button effectButton = new();
                 effectButton.Height = 60;
                 effectButton.Content = effects[i].DisplayName;
-                effectButton.Click += (s, e) => SetCurrentEffect(i);
 
+                // Make it so that Button calls SetCurrentEffect for its assigned effect
+                LEDEffectData effectForButton = effects[i];
+                effectButton.Click += (s, e) => SetCurrentEffect(effectForButton);
+
+                // Add buttons to the panel in the scroll view
                 effectButtonPanel.Children.Add(effectButton);
             }
         }
 
-        void SetCurrentEffect(int index)
+        void SetCurrentEffect(LEDEffectData effect)
         {
-            effectContentBox.Content = (UserControl)effects[index].Effect;
-            effectContentBox.Header = effects[index].DisplayName;
+            // Let effect know that we are stopping it
+            StopCurrentEffect();
+
+            currentEffect = effect;
+
+            // Get UI of effect and display it
+            effectContentBox.Content = (UserControl)effect.Effect;
+            effectContentBox.Header = effect.DisplayName;
+
+            // Let effect know that we are starting it
+            currentEffect.Effect.OnStart();
+
+            // Start effect
+            ledManager.StartEffect(effect);
         }
 
-        void DisplayFPS(float fps)
+        public void StopCurrentEffect()
         {
-            // TODO: Display max fps for current effect
-            fpsLabel.Content = $"FPS: {fps:00.0} / Max: {60}";
+            // Stop gracefully with saving to config
+            if (currentEffect != null)
+            {
+                currentEffect.Effect.OnStop();
+                App.Config.Save();
+            }
+        }
+
+        // TODO: Make this actually get called
+        void DisplayFPS()
+        {
+            if (currentEffect == null)
+                fpsLabel.Content = "FPS: 00.0 / Max: 00.0";
+            else
+                fpsLabel.Content = $"FPS: {fpsCounter.FPS:00.0} / Max: {currentEffect.MaxFPS:00.0}";
         }
     }
 }

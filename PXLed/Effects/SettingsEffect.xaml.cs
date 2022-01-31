@@ -46,21 +46,22 @@ namespace PXLed.Effects
             //}
         }
 
-        public object GetData()
+        public void OnStart()
         {
-            return new SettingsData() { numLeds = 50};
+            SettingsData data = App.Config.GetData<SettingsData>();
+            numLedUpDown.Value = data.NumLeds;
         }
 
-        public void SetData(object data)
+        public void OnStop()
         {
-            SettingsData settingsData = (SettingsData)data;
-
+            SettingsData data = new() { NumLeds = numLedUpDown.Value };
+            App.Config.SetData(data);
         }
     }
 
     public struct SettingsData
     {
-        public float brightness = 0.4f;
-        public int numLeds = 100;
+        public float Brightness { get; set; } = 0.4f;
+        public int NumLeds { get; set; } = 100;
     }
 }

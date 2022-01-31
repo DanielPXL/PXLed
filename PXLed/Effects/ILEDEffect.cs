@@ -12,7 +12,7 @@ namespace PXLed.Effects
         public void Update(ref Color24[] leds, float deltaTime);
 
         // Save data for config
-        public void SetData(object data);
-        public object GetData();
+        public void OnStart();
+        public void OnStop();
     }
 }
