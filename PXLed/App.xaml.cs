@@ -25,11 +25,13 @@ namespace PXLed
 
         private void Application_Exit(object sender, ExitEventArgs e)
         {
+            int currentEffect = mainWindow.GetCurrentEffectIndex();
             mainWindow.StopCurrentEffect();
 
             // Inject brightness slider data
             SettingsData settingsData = Config.GetData<SettingsData>();
             settingsData.Brightness = mainWindow.brightnessSlider.Value;
+            settingsData.CurrentEffectIndex = currentEffect;
             Config.SetData(settingsData);
 
             Config.Save();

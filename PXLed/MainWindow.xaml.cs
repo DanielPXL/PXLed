@@ -28,8 +28,7 @@ namespace PXLed
             effects = GetEffects();
             MakeEffectButtons();
 
-            // TODO: Save last used effect in config
-            SetCurrentEffect(effects[0]);
+            SetCurrentEffect(effects[settingsData.CurrentEffectIndex]);
 
             StartFPSTimer();
         }
@@ -117,6 +116,11 @@ namespace PXLed
             ledManager = new(settingsData.NumLeds, arduinoDevice, ledPreview, fpsCounter);
 
             SetCurrentEffect(currentEffect!);
+        }
+
+        public int GetCurrentEffectIndex()
+        {
+            return Array.IndexOf(effects, currentEffect);
         }
 
         void StartFPSTimer()

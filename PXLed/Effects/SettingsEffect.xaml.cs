@@ -63,6 +63,7 @@ namespace PXLed.Effects
 
     public struct SettingsData
     {
+        public int CurrentEffectIndex { get; set; } = 0;
         public double Brightness { get; set; } = 0.4d;
         public int NumLeds { get; set; } = 100;
         public string ArduinoPortName { get; set; } = "COM3";
