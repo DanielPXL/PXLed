@@ -13,7 +13,7 @@ bool startRead = false;
 bool readComplete = false;
 
 void setup() {
-  Serial.begin(230400);
+  Serial.begin(500000);
   
   FastLED.addLeds<WS2812B, LED_PIN, GRB>(leds, NUM_REAL_LEDS);
   FastLED.setBrightness(60);

@@ -22,7 +22,7 @@ namespace PXLed
 
             fpsCounter = new();
             arduinoDevice = new(settingsData.ArduinoPortName, settingsData.ArduinoBaudRate);
-            ledManager = new(91, arduinoDevice, ledPreview, fpsCounter);
+            ledManager = new(settingsData.NumLeds, arduinoDevice, ledPreview, fpsCounter);
 
             // Get all available effects and make buttons that select them for each of them
             effects = GetEffects();
