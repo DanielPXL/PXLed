@@ -88,5 +88,11 @@ namespace PXLed
                 }
             }
         }
+
+        public void StopEffect()
+        {
+            if (renderThread != null)
+                CurrentEffect = null;
+        }
     }
 }

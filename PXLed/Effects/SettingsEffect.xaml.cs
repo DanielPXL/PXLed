@@ -23,45 +23,49 @@ namespace PXLed.Effects
         }
 
         public string DisplayName => "Settings";
-        public float MaxFPS => 60f;
+        public float MaxFPS => 10f;
 
-        float time = 0f;
-        int index = 0;
-
-        // just testing
         public void Update(ref Color24[] leds, float deltaTime)
         {
-            time += deltaTime;
-            index++;
-            index %= 2;
-
             for (int i = 0; i < leds.Length; i++)
             {
-                leds[i] = Color24.FromHSV(i * 10d + time * 30f, 1d, 1d);
+                leds[i] = Color24.FromRGB(0, 0, 0);
             }
 
-            //for (int i = 0; i < leds.Length; i++)
-            //{
-            //    leds[i] = Color24.FromHSV(0d, 0d, index);
-            //}
+            // Display left and right border as red on led strip for setup
+            leds[0] = Color24.FromRGB(255, 0, 0);
+            leds[^1] = Color24.FromRGB(255, 0, 0);
+
+            // Display middle led as blue for setup
+            leds[leds.Length / 2] = Color24.FromRGB(0, 0, 255);
         }
 
         public void OnStart()
         {
             SettingsData data = App.Config.GetData<SettingsData>();
             numLedUpDown.Value = data.NumLeds;
+            portNameBox.Text = data.ArduinoPortName;
+            baudRateBox.Value = data.ArduinoBaudRate;
         }
 
         public void OnStop()
         {
-            SettingsData data = new() { NumLeds = numLedUpDown.Value };
+            SettingsData data = new()
+            {
+                NumLeds = numLedUpDown.Value,
+                ArduinoPortName = portNameBox.Text,
+                ArduinoBaudRate = baudRateBox.Value
+            };
+
             App.Config.SetData(data);
         }
     }
 
     public struct SettingsData
     {
-        public float Brightness { get; set; } = 0.4f;
+        public double Brightness { get; set; } = 0.4d;
         public int NumLeds { get; set; } = 100;
+        public string ArduinoPortName { get; set; } = "COM3";
+        public int ArduinoBaudRate { get; set; } = 230400;
     }
 }

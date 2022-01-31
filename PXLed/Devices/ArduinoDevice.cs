@@ -25,7 +25,7 @@ namespace PXLed.Devices
             // Try to open new SerialPort to and connect to Arduino
             try
             {
-                port = new SerialPort(portName, baudRate, Parity.None, 8);
+                port = new SerialPort(portName, baudRate, Parity.None, 8, StopBits.One);
                 port.Open();
             } catch (Exception ex)
             {
@@ -53,12 +53,20 @@ namespace PXLed.Devices
                 byteArray[i * 3 + 3] = (byte)Math.Min(253f, (float)colors[i].b * brightness);
             }
 
+            // Port can close at any time so we need to be as sure as possible that it isn't
+            if (port == null || !port.IsOpen)
+                return;
+
             port!.Write(byteArray, 0, byteArray.Length);
 
             // Wait for acknowledgment
             int tries = 0;
             while (true)
             {
+                // Port can close at any time so we need to be as sure as possible that it isn't
+                if (port == null || !port.IsOpen)
+                    return;
+
                 if (port!.BytesToRead > 0)
                 {                    
                     port.Read(readBuffer, 0, readBuffer.Length);

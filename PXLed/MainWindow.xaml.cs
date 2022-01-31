@@ -5,6 +5,8 @@ using System.Windows;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
+using System.Windows.Threading;
+using System;
 
 namespace PXLed
 {
@@ -14,9 +16,13 @@ namespace PXLed
         {
             InitializeComponent();
 
+            // Load brightness data from settings because that's the easiest way to store it
+            SettingsData settingsData = App.Config.GetData<SettingsData>();
+            brightnessSlider.Value = settingsData.Brightness;
+
             fpsCounter = new();
-            // TODO: Make Arduino device settings changeable through settings
-            ledManager = new(91, new ArduinoDevice("COM3", 230400), ledPreview, fpsCounter);
+            arduinoDevice = new(settingsData.ArduinoPortName, settingsData.ArduinoBaudRate);
+            ledManager = new(91, arduinoDevice, ledPreview, fpsCounter);
 
             // Get all available effects and make buttons that select them for each of them
             effects = GetEffects();
@@ -24,9 +30,14 @@ namespace PXLed
 
             // TODO: Save last used effect in config
             SetCurrentEffect(effects[0]);
+
+            StartFPSTimer();
         }
 
         FPSCounter fpsCounter;
+        DispatcherTimer fpsDisplayTimer;
+
+        ArduinoDevice arduinoDevice;
         LEDManager ledManager;
 
         LEDEffectData[] effects;
@@ -36,6 +47,7 @@ namespace PXLed
         {
             // SettingsEffect is added manually to ensure that it is placed first in the button list
             SettingsEffect settingsEffect = new();
+            settingsEffect.applyButton.Click += (s, e) => RestartArduino();
             LEDEffectData settingsEffectData = new(settingsEffect.DisplayName, settingsEffect.MaxFPS, settingsEffect);
 
             List<LEDEffectData> foundEffects = PluginFinder.FindEffects();
@@ -82,7 +94,9 @@ namespace PXLed
         }
 
         public void StopCurrentEffect()
-        {
+        {            
+            ledManager.StopEffect();
+
             // Stop gracefully with saving to config
             if (currentEffect != null)
             {
@@ -91,7 +105,28 @@ namespace PXLed
             }
         }
 
-        // TODO: Make this actually get called
+        public void RestartArduino()
+        {
+            StopCurrentEffect();
+
+            SettingsData settingsData = App.Config.GetData<SettingsData>();
+
+            arduinoDevice.Dispose();
+            arduinoDevice = new ArduinoDevice(settingsData.ArduinoPortName, settingsData.ArduinoBaudRate);
+
+            ledManager = new(settingsData.NumLeds, arduinoDevice, ledPreview, fpsCounter);
+
+            SetCurrentEffect(currentEffect!);
+        }
+
+        void StartFPSTimer()
+        {
+            fpsDisplayTimer = new DispatcherTimer();
+            fpsDisplayTimer.Tick += (s, e) => DisplayFPS();
+            fpsDisplayTimer.Interval = new TimeSpan(0, 0, 1);
+            fpsDisplayTimer.Start();
+        }
+
         void DisplayFPS()
         {
             if (currentEffect == null)

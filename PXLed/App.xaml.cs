@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PXLed.Effects;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -12,7 +13,7 @@ namespace PXLed
     {
         public static Config Config { get; private set; }
 
-        MainWindow mainWindow;
+        static MainWindow mainWindow;
 
         private void Application_Startup(object sender, StartupEventArgs args)
         {
@@ -25,6 +26,13 @@ namespace PXLed
         private void Application_Exit(object sender, ExitEventArgs e)
         {
             mainWindow.StopCurrentEffect();
+
+            // Inject brightness slider data
+            SettingsData settingsData = Config.GetData<SettingsData>();
+            settingsData.Brightness = mainWindow.brightnessSlider.Value;
+            Config.SetData(settingsData);
+
+            Config.Save();
         }
 
         public static void ShowError(Exception exception)
