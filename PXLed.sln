@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PXLed", "PXLed\PXLed.csproj", "{22E445E2-B12A-40B9-88E8-6AB923AB538B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PXLed.Effects.Default", "PXLed.Effects.Default\PXLed.Effects.Default.csproj", "{D5781379-92EC-4E05-90C7-64E0F5FE9187}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PXLed.Effects", "PXLed.Effects.Default\PXLed.Effects.csproj", "{D5781379-92EC-4E05-90C7-64E0F5FE9187}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
