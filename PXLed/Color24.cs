@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Media;
@@ -25,6 +26,7 @@ namespace PXLed
         public readonly byte b;
 
         // https://gist.github.com/guri-sharp/fecc601a65fe4b98a080
+        [JsonIgnore]
         public double Hue 
         { 
             get
@@ -63,6 +65,7 @@ namespace PXLed
             } 
         }
 
+        [JsonIgnore]
         public double Saturation
         {
             get
@@ -84,6 +87,7 @@ namespace PXLed
             }
         }
 
+        [JsonIgnore]
         public double Value
         {
             get

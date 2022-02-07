@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -41,7 +42,7 @@ namespace PXLed.Controls
             greenUpDown.TextChanged += (s, e) => UpdateFromUpDowns(Color24.FromRGB(Value.r, (byte)greenUpDown.Value, Value.b));
             blueUpDown.TextChanged += (s, e) => UpdateFromUpDowns(Color24.FromRGB(Value.r, Value.g, (byte)blueUpDown.Value));
 
-            hexTextBox.TextChanged += (s, e) => UpdateFromHexBox(Color24.FromHex(hexTextBox.Text));
+            hexTextBox.TextChanged += (s, e) => UpdateFromHexBox();
         }
 
         public Color24 Value
@@ -79,13 +80,17 @@ namespace PXLed.Controls
             UpdateHexBox();
         }
         
-        void UpdateFromHexBox(Color24 value)
+        void UpdateFromHexBox()
         {
-            // Update everything except the hex text box
-            colorValue = value;
-            UpdateImages();
-            UpdateSliders();
-            UpdateUpDowns();
+            // If text matches the required format
+            if (Regex.Match(hexTextBox.Text, @"^#[a-fA-F0-9]{6}$").Success)
+            {
+                // Update everything except the hex text box
+                colorValue = Color24.FromHex(hexTextBox.Text);
+                UpdateImages();
+                UpdateSliders();
+                UpdateUpDowns();
+            }
         }
 
         // Remember the last drawn color in order to know wether the images need to be redrawn
