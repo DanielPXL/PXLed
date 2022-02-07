@@ -23,6 +23,8 @@ namespace PXLed.Controls
         public int Min { get; set; } = int.MinValue;
         public int Max { get; set; } = int.MaxValue;
 
+        public event TextChangedEventHandler TextChanged;
+
         public int Value
         {
             get
@@ -73,6 +75,9 @@ namespace PXLed.Controls
                     textBox.CaretIndex = currentCaretIndex - 1;
                 }
             }
+
+            if (TextChanged != null)
+                TextChanged(this, e);
         }
 
         private void TextBox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
