@@ -1,0 +1,22 @@
+﻿<Window x:Class="PXLed.Controls.GradientPickerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PXLed.Controls"
+        mc:Ignorable="d"
+        Title="GradientPickerWindow" Height="400" Width="400" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        <local:FuncImage x:Name="keyListImage" PixelHeight="1" PixelWidth="512" Grid.Row="0" Margin="5"/>
+        <local:FuncImage x:Name="gradientImage" PixelHeight="1" PixelWidth="512" Grid.Row="1" Margin="5"/>
+        <Slider x:Name="timeSlider" Minimum="0" Maximum="1" Grid.Row="2" Margin="5"/>
+        <local:ColorPicker x:Name="colorPicker" Grid.Row="3" Margin="5"/>
+    </Grid>
+</Window>

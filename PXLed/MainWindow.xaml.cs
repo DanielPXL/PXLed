@@ -31,6 +31,9 @@ namespace PXLed
             SetCurrentEffect(effects[settingsData.CurrentEffectIndex]);
 
             StartFPSTimer();
+
+            // TODO: Make it live in the system tray
+            Closing += (s, e) => Application.Current.Shutdown();
         }
 
         FPSCounter fpsCounter;

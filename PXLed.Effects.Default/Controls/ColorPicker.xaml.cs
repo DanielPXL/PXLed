@@ -53,43 +53,61 @@ namespace PXLed.Controls
             }
             set
             {
+                Color24 oldValue = colorValue;
+
                 // Set internal color to value and update all the inputs
                 colorValue = value;
                 UpdateImages();
                 UpdateSliders();
                 UpdateUpDowns();
                 UpdateHexBox();
+
+                ValueChanged?.Invoke(this, new RoutedPropertyChangedEventArgs<Color24>(oldValue, value));
             }
         }
 
+        public event RoutedPropertyChangedEventHandler<Color24> ValueChanged;
+
         void UpdateFromSliders(Color24 value)
         {
+            Color24 oldValue = colorValue;
+
             // Update everything except Sliders
             colorValue = value;
             UpdateImages();
             UpdateUpDowns();
             UpdateHexBox();
+
+            ValueChanged?.Invoke(this, new RoutedPropertyChangedEventArgs<Color24>(oldValue, value));
         }
 
         void UpdateFromUpDowns(Color24 value)
         {
+            Color24 oldValue = colorValue;
+
             // Update everything except UpDowns
             colorValue = value;
             UpdateImages();
             UpdateSliders();
             UpdateHexBox();
+            
+            ValueChanged?.Invoke(this, new RoutedPropertyChangedEventArgs<Color24>(oldValue, value));
         }
-        
+
         void UpdateFromHexBox()
         {
             // If text matches the required format
             if (Regex.Match(hexTextBox.Text, @"^#[a-fA-F0-9]{6}$").Success)
             {
+                Color24 oldValue = colorValue;
+
                 // Update everything except the hex text box
                 colorValue = Color24.FromHex(hexTextBox.Text);
                 UpdateImages();
                 UpdateSliders();
                 UpdateUpDowns();
+            
+                ValueChanged?.Invoke(this, new RoutedPropertyChangedEventArgs<Color24>(oldValue, colorValue));
             }
         }
 
