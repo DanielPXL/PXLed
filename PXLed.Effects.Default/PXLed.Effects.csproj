@@ -25,6 +25,9 @@
     <Compile Update="Controls\IntegerUpDown.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Default\GradientEffect.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -37,6 +40,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Controls\IntegerUpDown.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Default\GradientEffect.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>

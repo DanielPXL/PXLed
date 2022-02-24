@@ -68,7 +68,7 @@ namespace PXLed.Devices
                     return;
 
                 if (port!.BytesToRead > 0)
-                {                    
+                {
                     port.Read(readBuffer, 0, readBuffer.Length);
                     if (readBuffer[0] == ACKNOWLEDGE_BYTE)
                     {

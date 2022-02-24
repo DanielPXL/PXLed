@@ -10,18 +10,28 @@ namespace PXLed.Controls
         {
             InitializeComponent();
 
-            Gradient = new Gradient();
-            Gradient.AddKey(Color24.FromHSV(144, 1, 1), 0.2f);
-
             gradientImage.ColorFunc = DrawGradient;
-            gradientImage.Draw();
+            Gradient = new Gradient();
 
             gradientImage.MouseDown += GradientImage_MouseDown;
         }
 
         GradientPickerWindow? window;
 
-        public Gradient Gradient { get; set; }
+        public Gradient Gradient
+        {
+            get
+            {
+                return gradient;
+            }
+            set
+            {
+                gradient = value;
+                gradientImage.Draw();
+            }
+        }
+
+        Gradient gradient;
 
         private void GradientImage_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -41,10 +51,9 @@ namespace PXLed.Controls
             window.Show();
         }
 
-        private void Window_ValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<Gradient> e)
+        private void Window_ValueChanged(object sender, RoutedPropertyChangedEventArgs<Gradient> e)
         {
             Gradient = e.NewValue;
-            gradientImage.Draw();
         }
 
         Color24 DrawGradient(int x, int y)

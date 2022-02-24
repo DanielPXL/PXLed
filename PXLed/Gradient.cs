@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace PXLed
@@ -16,6 +17,7 @@ namespace PXLed
             AddKey(Color24.FromRGB(255, 255, 255), 1f);
         }
 
+        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]
         List<ColorKey> keys;
 
         public Color24 Evaluate(float time)
@@ -91,6 +93,7 @@ namespace PXLed
         }
     }
 
+    [Serializable]
     public struct ColorKey
     {
         public ColorKey(Color24 color, float time)
