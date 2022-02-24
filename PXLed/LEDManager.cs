@@ -24,6 +24,7 @@ namespace PXLed
         public LEDEffectData? CurrentEffect { get; private set; }
 
         public Color24[] colors;
+        public float brightness;
 
         private readonly ILEDDevice ledDevice;
         private readonly LEDPreviewControl? preview;
@@ -66,7 +67,7 @@ namespace PXLed
                 CurrentEffect.Effect.Update(ref colors, delta);
 
                 // Send new colors to LEDs
-                ledDevice.SendColors(ref colors, 0.4f);
+                ledDevice.SendColors(ref colors, brightness);
 
                 try
                 {

@@ -16,13 +16,15 @@ namespace PXLed
         {
             InitializeComponent();
 
-            // Load brightness data from settings because that's the easiest way to store it
+            // Load settings
             SettingsData settingsData = App.Config.GetData<SettingsData>();
-            brightnessSlider.Value = settingsData.Brightness;
 
             fpsCounter = new();
             arduinoDevice = new(settingsData.ArduinoPortName, settingsData.ArduinoBaudRate);
             ledManager = new(settingsData.NumLeds, arduinoDevice, ledPreview, fpsCounter);
+
+            brightnessSlider.ValueChanged += (s, e) => ledManager.brightness = (float)e.NewValue;
+            brightnessSlider.Value = settingsData.Brightness;
 
             // Get all available effects and make buttons that select them for each of them
             effects = GetEffects();
