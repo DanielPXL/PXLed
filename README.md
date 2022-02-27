@@ -6,7 +6,7 @@ PXLed is a real-time LED strip (WS2812B) interface made in WPF that is designed 
 ## Features
 - Real-time WS2812B LED strip connection
     - Arduino is the only supported device right now, support for Raspberry Pi is planned in the future
-- Useful LED stip preview
+- Useful LED strip preview
 - Easy to use plugin system
 - Basic effects included by default
 
@@ -33,6 +33,6 @@ PXLed is a real-time LED strip (WS2812B) interface made in WPF that is designed 
 6. Start PXLed on your computer
 7. In the settings, edit the values and click "Apply"
     - Number of LEDs - equal to NUM_LEDS in the Arduino code
-    - Arduino Port Name - Name of the Arduino port in Winows (viewable in Device Manager)
+    - Arduino Port Name - Name of the Arduino port in Windows (viewable in Device Manager)
     - Arduino Baud Rate - equal to SERIAL_BAUD_RATE in the Arduino code
 8. Click the reset button on the Arduino and the LED strip should turn on!
