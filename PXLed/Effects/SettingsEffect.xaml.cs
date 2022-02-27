@@ -67,6 +67,6 @@ namespace PXLed.Effects
         public double Brightness { get; set; } = 0.4d;
         public int NumLeds { get; set; } = 100;
         public string ArduinoPortName { get; set; } = "COM3";
-        public int ArduinoBaudRate { get; set; } = 230400;
+        public int ArduinoBaudRate { get; set; } = 500000;
     }
 }
