@@ -3,6 +3,8 @@
 #define NUM_REAL_LEDS 120
 #define NUM_LEDS 91
 #define LED_PIN 13
+#define SERIAL_BAUD_RATE 500000
+#define BRIGHTNESS 60
 
 CRGB leds[NUM_REAL_LEDS];
 
@@ -14,10 +16,10 @@ bool startRead = false;
 bool readComplete = false;
 
 void setup() {
-  Serial.begin(500000);
+  Serial.begin(SERIAL_BAUD_RATE);
 
   FastLED.addLeds<WS2812B, LED_PIN, GRB>(leds, NUM_REAL_LEDS);
-  FastLED.setBrightness(60);
+  FastLED.setBrightness(BRIGHTNESS);
 }
 
 void loop() {
