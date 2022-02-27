@@ -1,7 +1,7 @@
 # PXLed
 
 ## About
-PXLed is a real-time LED strip (WS2812B) interface made in WPF that is designed to run on a computer without GPIO pins. It uses a secondary system like an Arduino to connect to the LED strip and communicates with it through USB.
+PXLed is a real-time LED strip (WS2812B) interface made in WPF that is designed to run on a computer without GPIO pins. It uses a secondary device like an Arduino to connect to the LED strip and communicates with it through USB.
 
 ## Features
 - Real-time WS2812B LED strip connection
