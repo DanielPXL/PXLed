@@ -132,7 +132,7 @@ namespace PXLed
         {
             fpsDisplayTimer = new DispatcherTimer();
             fpsDisplayTimer.Tick += (s, e) => DisplayFPS();
-            fpsDisplayTimer.Interval = new TimeSpan(0, 0, 1);
+            fpsDisplayTimer.Interval = new TimeSpan(0, 0, 0, 0, 250);
             fpsDisplayTimer.Start();
         }
 

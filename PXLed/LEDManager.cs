@@ -85,9 +85,11 @@ namespace PXLed
                 }
 
                 // Wait until enough time has passed for the given frames per second
-                while ((now - DateTime.UtcNow.Ticks) / 10000f + optimalTime > 0)
+                float sleepTime = (now - DateTime.UtcNow.Ticks) / (float)TimeSpan.TicksPerMillisecond + optimalTime;
+                while (sleepTime > 0f)
                 {
-                    Thread.Sleep(5);
+                    Thread.Sleep((int)(sleepTime / 2f));
+                    sleepTime = (now - DateTime.UtcNow.Ticks) / (float)TimeSpan.TicksPerMillisecond + optimalTime;
                 }
             }
         }
