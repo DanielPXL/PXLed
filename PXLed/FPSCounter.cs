@@ -24,21 +24,21 @@ namespace PXLed
         
         private readonly Action<float>? callback;
 
-        private int startTime;
+        private long startTime;
 
-        public void StartFrame()
+        public void StartFrame(long ticksNow)
         {
-            startTime = Environment.TickCount;
+            startTime = ticksNow;
         }
 
-        public void StopFrame()
+        public void StopFrame(long ticksNow)
         {
             // Calculate delta time in ticks
-            int deltaTicks = Environment.TickCount - startTime;
+            long deltaTicks = ticksNow - startTime;
             if (deltaTicks > 0)
             {
                 // fps for one tick
-                float currentFps = 1000f / deltaTicks;
+                float currentFps = (float)TimeSpan.TicksPerSecond / deltaTicks;
 
                 // Lerp smoothes the value with previous value
                 fps = Lerp(fps, currentFps, 0.1f);

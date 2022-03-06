@@ -47,20 +47,21 @@ namespace PXLed
         // Very much inspired by https://gamedev.stackexchange.com/a/69769
         void EffectLoop()
         {
-            int now;
-            int last = Environment.TickCount;
+            long now;
+            long last = DateTime.UtcNow.Ticks;
 
             while (renderThread!.IsAlive && CurrentEffect != null)
             {
+                now = DateTime.UtcNow.Ticks;
+
                 // Do stuff with the fps counter in order to record the fps correctly for displaying
-                fpsCounter?.StopFrame();
-                fpsCounter?.StartFrame();
+                fpsCounter?.StopFrame(now);
+                fpsCounter?.StartFrame(now);
 
                 float optimalTime = 1000f / CurrentEffect.MaxFPS;
              
-                now = Environment.TickCount;
-                int updateLength = now - last;
-                float delta = updateLength / 1000f;
+                long updateLength = now - last;
+                float delta = updateLength / (float)TimeSpan.TicksPerSecond;
                 last = now;
 
                 // Execute effect
@@ -74,7 +75,8 @@ namespace PXLed
                     // Send new colors to the preview
                     // Execute on UI thread in order to prevent an exception
                     preview?.Dispatcher.Invoke(() => preview.SetColors(ref colors));
-                } catch (TaskCanceledException)
+                }
+                catch (TaskCanceledException)
                 {
                     // Don't really know why but MainWindow closing causes this exception to throw
 
@@ -82,10 +84,10 @@ namespace PXLed
                     break;
                 }
 
-                int sleepTime = last - Environment.TickCount + (int)optimalTime;
-                if (sleepTime > 0)
+                // Wait until enough time has passed for the given frames per second
+                while ((now - DateTime.UtcNow.Ticks) / 10000f + optimalTime > 0)
                 {
-                    Thread.Sleep(sleepTime);
+                    Thread.Sleep(5);
                 }
             }
         }
