@@ -35,29 +35,31 @@ namespace PXLed.Devices
 
         private readonly SerialPort? port;
         private readonly byte[] readBuffer;
+        byte[] sendBuffer = new byte[1];
 
         public void SendColors(ref Color24[] colors, float brightness)
         {
             // Array length = rgb count + start byte + stop byte
-            byte[] byteArray = new byte[colors.Length * 3 + 2];
+            if (sendBuffer.Length != colors.Length * 3 + 2)
+                sendBuffer = new byte[colors.Length * 3 + 2];
 
             // Start & Stop bytes
-            byteArray[0] = START_BYTE;
-            byteArray[byteArray.Length - 1] = STOP_BYTE;
+            sendBuffer[0] = START_BYTE;
+            sendBuffer[^1] = STOP_BYTE;
 
             // Color data
             for (int i = 0; i < colors.Length; i++)
             {
-                byteArray[i * 3 + 1] = (byte)Math.Min(253f, (float)colors[i].r * brightness);
-                byteArray[i * 3 + 2] = (byte)Math.Min(253f, (float)colors[i].g * brightness);
-                byteArray[i * 3 + 3] = (byte)Math.Min(253f, (float)colors[i].b * brightness);
+                sendBuffer[i * 3 + 1] = (byte)Math.Min(253f, (float)colors[i].r * brightness);
+                sendBuffer[i * 3 + 2] = (byte)Math.Min(253f, (float)colors[i].g * brightness);
+                sendBuffer[i * 3 + 3] = (byte)Math.Min(253f, (float)colors[i].b * brightness);
             }
 
             // Port can close at any time so we need to be as sure as possible that it isn't
             if (port == null || !port.IsOpen)
                 return;
 
-            port!.Write(byteArray, 0, byteArray.Length);
+            port!.Write(sendBuffer, 0, sendBuffer.Length);
 
             // Wait for acknowledgment
             int tries = 0;
