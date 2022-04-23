@@ -20,8 +20,14 @@ namespace PXLed
             SettingsData settingsData = App.Config.GetData<SettingsData>();
 
             fpsCounter = new();
-            arduinoDevice = new(settingsData.ArduinoPortName, settingsData.ArduinoBaudRate);
-            ledManager = new(settingsData.NumLeds, arduinoDevice, ledPreview, fpsCounter);
+
+            // Create device
+            if (settingsData.UseWiFi)
+                device = new UdpDevice(settingsData.DeviceIP, settingsData.DevicePort);
+            else
+                device = new ArduinoDevice(settingsData.ArduinoPortName, settingsData.ArduinoBaudRate);
+            
+            ledManager = new(settingsData.NumLeds, device, ledPreview, fpsCounter);
 
             brightnessSlider.ValueChanged += (s, e) => ledManager.brightness = (float)e.NewValue;
             brightnessSlider.Value = settingsData.Brightness;
@@ -41,7 +47,7 @@ namespace PXLed
         FPSCounter fpsCounter;
         DispatcherTimer fpsDisplayTimer;
 
-        ArduinoDevice arduinoDevice;
+        ILEDDevice device;
         LEDManager ledManager;
 
         LEDEffectData[] effects;
@@ -111,15 +117,23 @@ namespace PXLed
 
         public void RestartArduino()
         {
+            // Stop effect
             StopCurrentEffect();
 
+            // Get Settings
             SettingsData settingsData = App.Config.GetData<SettingsData>();
 
-            arduinoDevice.Dispose();
-            arduinoDevice = new ArduinoDevice(settingsData.ArduinoPortName, settingsData.ArduinoBaudRate);
+            device.Dispose();
+            
+            // Create new device
+            if (settingsData.UseWiFi)
+                device = new UdpDevice(settingsData.DeviceIP, settingsData.DevicePort);
+            else
+                device = new ArduinoDevice(settingsData.ArduinoPortName, settingsData.ArduinoBaudRate);
 
-            ledManager = new(settingsData.NumLeds, arduinoDevice, ledPreview, fpsCounter);
+            ledManager = new(settingsData.NumLeds, device, ledPreview, fpsCounter);
 
+            // Restart effect
             SetCurrentEffect(currentEffect!);
         }
 

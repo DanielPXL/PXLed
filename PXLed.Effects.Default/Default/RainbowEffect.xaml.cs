@@ -49,6 +49,12 @@ namespace PXLed.Effects.Default
 
     public struct RainbowEffectData
     {
+        public RainbowEffectData(float zoom, float speed)
+        {
+            Zoom = zoom;
+            Speed = speed;
+        }
+
         public float Zoom { get; set; } = 10f;
         public float Speed { get; set; } = 50f;
     }

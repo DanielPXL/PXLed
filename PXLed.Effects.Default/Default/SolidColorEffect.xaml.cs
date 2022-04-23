@@ -35,6 +35,11 @@ namespace PXLed.Effects.Default
 
     public struct SolidColorEffectData
     {
+        public SolidColorEffectData(Color24 color)
+        {
+            Color = color;
+        }
+
         public Color24 Color { get; set; } = new Color24();
     }
 }

@@ -11,7 +11,7 @@ namespace PXLed.Devices
     /// <summary>
     /// Connection to an Arduino using SerialPorts
     /// </summary>
-    public class ArduinoDevice : ILEDDevice, IDisposable
+    public class ArduinoDevice : ILEDDevice
     {
         public const byte START_BYTE = 254;
         public const byte STOP_BYTE = 255;

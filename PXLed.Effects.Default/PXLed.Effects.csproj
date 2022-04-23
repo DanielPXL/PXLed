@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FftSharp" Version="1.1.4" />
     <PackageReference Include="NAudio" Version="2.0.1" />
   </ItemGroup>
 

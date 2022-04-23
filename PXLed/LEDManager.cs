@@ -88,7 +88,7 @@ namespace PXLed
                 float sleepTime = (now - DateTime.UtcNow.Ticks) / (float)TimeSpan.TicksPerMillisecond + optimalTime;
                 while (sleepTime > 0f)
                 {
-                    Thread.Sleep((int)(sleepTime / 2f));
+                    Thread.Sleep((int)(sleepTime / 10f));
                     sleepTime = (now - DateTime.UtcNow.Ticks) / (float)TimeSpan.TicksPerMillisecond + optimalTime;
                 }
             }
