@@ -27,8 +27,8 @@ namespace PXLed
 
         // https://gist.github.com/guri-sharp/fecc601a65fe4b98a080
         [JsonIgnore]
-        public double Hue 
-        { 
+        public double Hue
+        {
             get
             {
                 float max = Math.Max(Math.Max(r, g), b);
@@ -62,7 +62,7 @@ namespace PXLed
                 }
 
                 return h;
-            } 
+            }
         }
 
         [JsonIgnore]
@@ -78,7 +78,8 @@ namespace PXLed
                 if (max == min)
                 {
                     s = 0;
-                } else
+                }
+                else
                 {
                     s = (max - min) / max;
                 }
@@ -93,7 +94,7 @@ namespace PXLed
             get
             {
                 float max = Math.Max(Math.Max(r, g), b);
-                double v = max / 255;                
+                double v = max / 255;
                 return v;
             }
         }
@@ -165,9 +166,16 @@ namespace PXLed
             return FromRGB((byte)r.Next(0, 256), (byte)r.Next(0, 256), (byte)r.Next(0, 256));
         }
 
-        public static Color24 Lerp(Color24 a, Color24 b, float t)
+        /// <summary>
+        /// Linear interpolation between the RGB values of two colors.
+        /// </summary>
+        /// <param name="a">The first color.</param>
+        /// <param name="b">The second color.</param>
+        /// <param name="t">How much to interpolate between 0 to 1.</param>
+        /// <returns></returns>
+        public static Color24 LerpRGB(Color24 a, Color24 b, float t)
         {
-            // Lerp each component of the two colors, then create a new color from these components
+            // Lerp each RGB component of the two colors, then create a new color from these components
             float newR = a.r + (b.r - a.r) * t;
             float newG = a.g + (b.g - a.g) * t;
             float newB = a.b + (b.b - a.b) * t;

@@ -156,7 +156,7 @@ namespace PXLed.Controls
 
             // If the current selected color is nearby to the pixel being calculated, make it darker so that there's a marker for the current selection
             if (Math.Abs(pixelSat - Value.Saturation) < 0.03d && Math.Abs(pixelVal - Value.Value) < 0.03d)
-                return Color24.Lerp(baseColor, Color24.FromRGB(0, 0, 0), 0.5f);
+                return Color24.LerpRGB(baseColor, Color24.FromRGB(0, 0, 0), 0.5f);
             else
                 return baseColor;
         }
@@ -169,7 +169,7 @@ namespace PXLed.Controls
 
             // If the current selected color is nearby to the pixel being calculated, make it darker so that there's a marker for the current selection
             if (Math.Abs(hueAtHeight - Value.Hue) < 20d)
-                return Color24.Lerp(baseColor, Color24.FromRGB(0, 0, 0), 0.5f);
+                return Color24.LerpRGB(baseColor, Color24.FromRGB(0, 0, 0), 0.5f);
             else
                 return baseColor;
         }

@@ -27,6 +27,7 @@ namespace PXLed
             ColorKey leftKey = keys[0];
             ColorKey rightKey = keys[keys.Count - 1];
 
+            // Find left and right key
             for (int i = 0; i < keys.Count; i++)
             {
                 if (time > keys[i].time)
@@ -40,8 +41,12 @@ namespace PXLed
                 }
             }
 
+            // Protect from division by zero
+            if (leftKey.time == rightKey.time)
+                return leftKey.color;
+            
             float blendTime = (time - leftKey.time) / (rightKey.time - leftKey.time);
-            return Color24.Lerp(leftKey.color, rightKey.color, blendTime);
+            return Color24.LerpRGB(leftKey.color, rightKey.color, blendTime);
         }
 
         public int AddKey(Color24 color, float time)
