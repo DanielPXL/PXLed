@@ -25,6 +25,7 @@ namespace PXLed
 
         public Color24[] colors;
         public float brightness;
+        public bool skipPreview = false;
 
         private readonly ILEDDevice ledDevice;
         private readonly LEDPreviewControl? preview;
@@ -70,18 +71,21 @@ namespace PXLed
                 // Send new colors to LEDs
                 ledDevice.SendColors(ref colors, brightness);
 
-                try
+                if (!skipPreview)
                 {
-                    // Send new colors to the preview
-                    // Execute on UI thread in order to prevent an exception
-                    preview?.Dispatcher.Invoke(() => preview.SetColors(ref colors));
-                }
-                catch (TaskCanceledException)
-                {
-                    // Don't really know why but MainWindow closing causes this exception to throw
+                    try
+                    {
+                        // Send new colors to the preview
+                        // Execute on UI thread in order to prevent an exception
+                        preview?.Dispatcher.Invoke(() => preview.SetColors(ref colors));
+                    }
+                    catch (TaskCanceledException)
+                    {
+                        // Don't really know why but MainWindow closing causes this exception to throw
 
-                    // Because the MainWindow is closing and the process is being stopped, break so that the thread exits cleanly
-                    break;
+                        // Because the MainWindow is closing and the process is being stopped, break so that the thread exits cleanly
+                        break;
+                    }
                 }
 
                 // Wait until enough time has passed for the given frames per second

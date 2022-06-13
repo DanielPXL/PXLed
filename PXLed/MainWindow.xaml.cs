@@ -28,6 +28,7 @@ namespace PXLed
                 device = new ArduinoDevice(settingsData.ArduinoPortName, settingsData.ArduinoBaudRate);
             
             ledManager = new(settingsData.NumLeds, device, ledPreview, fpsCounter);
+            StateChanged += MainWindow_StateChanged;
 
             brightnessSlider.ValueChanged += (s, e) => ledManager.brightness = (float)e.NewValue;
             brightnessSlider.Value = settingsData.Brightness;
@@ -140,6 +141,15 @@ namespace PXLed
         public int GetCurrentEffectIndex()
         {
             return Array.IndexOf(effects, currentEffect);
+        }
+
+        private void MainWindow_StateChanged(object? sender, EventArgs e)
+        {
+            // Skip drawing the preview if the window is not visible to save on resources
+            if (WindowState == WindowState.Minimized)
+                ledManager.skipPreview = true;
+            else
+                ledManager.skipPreview = false;
         }
 
         void StartFPSTimer()
