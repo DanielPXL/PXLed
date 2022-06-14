@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Shapes;
 
@@ -15,18 +16,21 @@ namespace PXLed.Controls
             Gradient = new();
 
             keyListImage.ColorFunc = DrawKeyListImage;
-            keyListImage.Draw();
 
             gradientImage.ColorFunc = DrawGradientImage;
-            gradientImage.Draw();
 
             keyListImage.MouseDown += KeyListImage_MouseDown;
             timeSlider.ValueChanged += TimeSlider_ValueChanged;
             colorPicker.ValueChanged += ColorPicker_ValueChanged;
+
+            interpolationComboBox.ItemsSource = Enum.GetValues(typeof(InterpolationType));
+            interpolationComboBox.SelectionChanged += InterpolationComboBox_SelectionChanged;
         }
 
         public Gradient Gradient { get; set; }
         public event RoutedPropertyChangedEventHandler<Gradient>? ValueChanged;
+
+        public InterpolationType SelectedInterpolationType { get; set; }
 
         int selectedKey;
 
@@ -85,13 +89,23 @@ namespace PXLed.Controls
             ValueChanged?.Invoke(this, new(Gradient, Gradient));
         }
 
-        void SelectKey(int index)
+        private void InterpolationComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Gradient.UpdateKeyInterpolation(selectedKey, (InterpolationType)interpolationComboBox.SelectedItem);
+
+            Draw();
+
+            ValueChanged?.Invoke(this, new(Gradient, Gradient));
+        }
+
+        public void SelectKey(int index)
         {
             selectedKey = index;
 
             List<ColorKey> keys = Gradient.GetKeys();
             timeSlider.Value = keys[index].time;
             colorPicker.Value = keys[index].color;
+            interpolationComboBox.SelectedItem = keys[index].interpolationType;
 
             Draw();
         }
