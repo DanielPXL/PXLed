@@ -46,12 +46,21 @@ namespace PXLed
                 return leftKey.color;
             
             float blendTime = (time - leftKey.time) / (rightKey.time - leftKey.time);
-            return Color24.LerpHSVSpace(leftKey.color, rightKey.color, blendTime);
+
+            if (leftKey.interpolationType == InterpolationType.HSVSpace)
+                return Color24.LerpHSVSpace(leftKey.color, rightKey.color, blendTime);
+            else
+                return Color24.LerpRGB(leftKey.color, rightKey.color, blendTime);
         }
 
         public int AddKey(Color24 color, float time)
         {
-            return AddKey(new ColorKey(color, time));
+            return AddKey(new ColorKey(color, time, InterpolationType.RGB));
+        }
+
+        public int AddKey(Color24 color, float time, InterpolationType interpolationType)
+        {
+            return AddKey(new ColorKey(color, time, interpolationType));
         }
 
         public int AddKey(ColorKey key)
@@ -83,13 +92,19 @@ namespace PXLed
         public int UpdateKeyTime(int index, float time)
         {
             Color24 col = keys[index].color;
+            InterpolationType interpolationType = keys[index].interpolationType;
             RemoveKey(index);
-            return AddKey(col, time);
+            return AddKey(col, time, interpolationType);
         }
 
         public void UpdateKeyColor(int index, Color24 col)
         {
-            keys[index] = new ColorKey(col, keys[index].time);
+            keys[index] = new ColorKey(col, keys[index].time, keys[index].interpolationType);
+        }
+        
+        public void UpdateKeyInterpolation(int index, InterpolationType type)
+        {
+            keys[index] = new ColorKey(keys[index].color, keys[index].time, type);
         }
 
         public List<ColorKey> GetKeys()
@@ -101,13 +116,21 @@ namespace PXLed
     [Serializable]
     public struct ColorKey
     {
-        public ColorKey(Color24 color, float time)
+        public ColorKey(Color24 color, float time, InterpolationType interpolationType)
         {
             this.color = color;
             this.time = time;
+            this.interpolationType = interpolationType;
         }
 
         public readonly Color24 color;
         public readonly float time;
+        public readonly InterpolationType interpolationType;
+    }
+
+    public enum InterpolationType
+    {
+        RGB,
+        HSVSpace
     }
 }

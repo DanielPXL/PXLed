@@ -41,7 +41,7 @@ namespace PXLed.Controls
                 window.ShowInTaskbar = false;
 
                 window.Gradient = Gradient;
-                window.Draw();
+                window.SelectKey(0);
 
                 window.Deactivated += (s, e) => window.Hide();
                 window.Closing += (s, e) => { window.Hide(); e.Cancel = true; };

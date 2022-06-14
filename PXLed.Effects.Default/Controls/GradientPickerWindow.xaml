@@ -5,18 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PXLed.Controls"
         mc:Ignorable="d"
-        Title="GradientPickerWindow" Height="400" Width="400" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+        Title="GradientPickerWindow" Height="500" Width="400" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         
         <local:FuncImage x:Name="keyListImage" PixelHeight="1" PixelWidth="512" Grid.Row="0" Margin="5"/>
         <local:FuncImage x:Name="gradientImage" PixelHeight="1" PixelWidth="512" Grid.Row="1" Margin="5"/>
         <Slider x:Name="timeSlider" Minimum="0" Maximum="1" Grid.Row="2" Margin="5"/>
         <local:ColorPicker x:Name="colorPicker" Grid.Row="3" Margin="5"/>
+
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Column="0" Content="Interpolation:" FontSize="14" VerticalAlignment="Center"/>
+            <ComboBox x:Name="interpolationComboBox" Grid.Column="1" Margin="4"/>
+        </Grid>
     </Grid>
 </Window>
