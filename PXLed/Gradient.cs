@@ -46,7 +46,7 @@ namespace PXLed
                 return leftKey.color;
             
             float blendTime = (time - leftKey.time) / (rightKey.time - leftKey.time);
-            return Color24.LerpHSV(leftKey.color, rightKey.color, blendTime);
+            return Color24.LerpHSVSpace(leftKey.color, rightKey.color, blendTime);
         }
 
         public int AddKey(Color24 color, float time)

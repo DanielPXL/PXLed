@@ -185,55 +185,57 @@ namespace PXLed
 
 		/// <summary>
 		/// Linear interpolation between the HSV values of two colors.
+		/// Uses polar coordinates in a cylinder to interpolate between the HSV values.
+		/// Very computationally expensive, but gives somewhat nicer-looking results than <see cref="LerpRGB"/>.
 		/// </summary>
 		/// <param name="a">The first color.</param>
 		/// <param name="b">The second color.</param>
 		/// <param name="t">How much to interpolate between 0 to 1.</param>
-		public static Color24 LerpHSV(Color24 a, Color24 b, float t)
+		public static Color24 LerpHSVSpace(Color24 a, Color24 b, float t)
 		{
 			// Convert each color to HSV Space Coordinates
 			Vector3 aHSV = a.ToHSVSpace();
 			Vector3 bHSV = b.ToHSVSpace();
 
-			//Do Lerp inside HSV Space
+			// Lerp inside HSV space
 			Vector3 newHSV = aHSV + (bHSV - aHSV) * t;
 
-			// Return the new Lerp color Value
+			// Return the new lerped color value
 			return FromHSVSpace(newHSV);
 		}
 
 		/// <summary>
-		/// Creates a <see cref="Color24">Color24</see> from the given HSV Space Coordinates
+		/// Creates a <see cref="Color24"/> from the given HSV space coordinates.
 		/// </summary>
-		/// <param name="HSVSpace">The HSV Space Coordinates</param>
+		/// <param name="HSVSpace">The HSV space coordinates</param>
 		private static Color24 FromHSVSpace(Vector3 HSVSpace)
 		{
-			// Convert the Cartesian Coordinates to the Polar Coordinates 
-			double hue = ((Math.Atan2(HSVSpace.X, HSVSpace.Y) + Math.PI) * (180 / Math.PI));
+			// Convert the Cartesian coordinates to the polar coordinates 
+			double hue = (Math.Atan2(HSVSpace.X, HSVSpace.Y) + Math.PI) * (180 / Math.PI);
 			double saturation = Math.Sqrt(HSVSpace.X * HSVSpace.X + HSVSpace.Y * HSVSpace.Y);
 
-			// Z/Value stays Cartesian
+			// Z value stays Cartesian
 			var notvec = FromHSV(hue, saturation, HSVSpace.Z);
 
-			//Return the Color at the given HSV Space Coordinates
+			// Return the color at the given HSV space coordinates
 			return notvec;
 		}
 
 		/// <summary>
-		/// Gives the HSV Space Coordinates from the <see cref"Color24">Color24</see>
+		/// Returns the HSV space Coordinates from the <see cref"Color24"/>.
 		/// </summary>
 		public Vector3 ToHSVSpace()
 		{
-			// HSV Space is basicly a Cylindrical Coordinate System
+			// HSV Space is a polar (cylindrical) coordinate system
 			// https://en.wikipedia.org/wiki/HSV_color_space
-			// Convert the Polar Coordinates of the system (Hue and Saturation) to Cartesian Coordinates (X and Y)
+			// Convert the polar coordinates of the system (Hue and Saturation) to Cartesian coordinates (X and Y)
 			double x = (Saturation * Math.Sin(Hue * (Math.PI / 180d) - Math.PI));
 			double y = (Saturation * Math.Cos(Hue * (Math.PI / 180d) - Math.PI));
 
 			// Value is alrady Cartesian
 			var vec = new Vector3((float)x, (float)y, (float)Value);
 			
-			//Return the Position of the Color
+			// Return the position of the color
 			return vec;
 		}
 		
