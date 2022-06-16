@@ -47,15 +47,22 @@ namespace PXLed
             
             float blendTime = (time - leftKey.time) / (rightKey.time - leftKey.time);
 
-            if (leftKey.interpolationType == InterpolationType.HSVSpace)
-                return Color24.LerpHSVSpace(leftKey.color, rightKey.color, blendTime);
-            else
-                return Color24.LerpRGB(leftKey.color, rightKey.color, blendTime);
+			switch (leftKey.interpolationType)
+			{
+				case InterpolationType.RGB:
+                    return Color24.LerpRGB(leftKey.color, rightKey.color, blendTime);
+				case InterpolationType.HSVSpace:
+                    return Color24.LerpHSVSpace(leftKey.color, rightKey.color, blendTime);
+				case InterpolationType.HSV:
+                    return Color24.LerpHSV(leftKey.color, rightKey.color, blendTime);
+				default:
+                    return Color24.LerpRGB(leftKey.color, rightKey.color, blendTime);
+			}
         }
 
         public int AddKey(Color24 color, float time)
         {
-            return AddKey(new ColorKey(color, time, InterpolationType.RGB));
+            return AddKey(new ColorKey(color, time, InterpolationType.HSV));
         }
 
         public int AddKey(Color24 color, float time, InterpolationType interpolationType)
@@ -130,6 +137,7 @@ namespace PXLed
 
     public enum InterpolationType
     {
+		HSV,
         RGB,
         HSVSpace
     }

@@ -185,6 +185,39 @@ namespace PXLed
 
 		/// <summary>
 		/// Linear interpolation between the HSV values of two colors.
+		/// It priorities the shorter path through Hue. This results in a better looking interpolation than <see cref="LerpRGB"/> or <see cref="LerpHSVSpace"/>.
+		/// <param name="a">The first color.</param>
+		/// <param name="b">The second color.</param>
+		/// <param name="t">How much to interpolate between 0 to 1.</param>
+		public static Color24 LerpHSV(Color24 a, Color24 b, float t)
+		{
+			double startH = a.Hue;
+			double endH = b.Hue;
+			double diffH = (endH - startH);
+
+			// Lerp diff only 180 degrees at max
+			while (diffH > 180 || diffH < -180)
+			{
+				// If the diff is positive, add a full rotation to the start angle
+				if (diffH > 0)
+					startH += 360;
+				// If the diff is negative, subtract a full rotation from the start angle
+				else
+					endH += 360;
+				diffH = endH - startH;
+			}
+			// Do standard Lerp calculation and remove all extra rotations/clamp it between 0 and 360
+			double lerpH = (startH + (diffH * t));
+
+			// Same for Saturation and Value
+			double lerpS = a.Saturation + (b.Saturation - a.Saturation) * t;
+			double lerpV = a.Value + (b.Value - a.Value) * t;
+
+			return FromHSV(lerpH, lerpS, lerpV);
+		}
+
+		/// <summary>
+		/// Linear interpolation between the HSV Space values of two colors.
 		/// Uses polar coordinates in a cylinder to interpolate between the HSV values.
 		/// Very computationally expensive, but gives somewhat nicer-looking results than <see cref="LerpRGB"/>.
 		/// </summary>
@@ -234,11 +267,11 @@ namespace PXLed
 
 			// Value is alrady Cartesian
 			var vec = new Vector3((float)x, (float)y, (float)Value);
-			
+
 			// Return the position of the color
 			return vec;
 		}
-		
+
 		// Inspired by https://docs.microsoft.com/en-us/dotnet/api/system.windows.media.imaging.writeablebitmap?redirectedfrom=MSDN&view=windowsdesktop-6.0
 		/// <summary>
 		/// Converts the color to 24-bit integer where each component takes up 8 bits.
