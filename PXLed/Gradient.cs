@@ -62,7 +62,7 @@ namespace PXLed
 
         public int AddKey(Color24 color, float time)
         {
-            return AddKey(new ColorKey(color, time, InterpolationType.RGB));
+            return AddKey(new ColorKey(color, time, InterpolationType.HSV));
         }
 
         public int AddKey(Color24 color, float time, InterpolationType interpolationType)
@@ -137,8 +137,8 @@ namespace PXLed
 
     public enum InterpolationType
     {
+		HSV,
         RGB,
-        HSVSpace,
-		HSV
+        HSVSpace
     }
 }
