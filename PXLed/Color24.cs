@@ -200,7 +200,7 @@ namespace PXLed
 			{
 				// If the diff is positive, add a full rotation to the start angle
 				if (diffH > 0)
-					endH -= 360;
+					startH += 360;
 				// If the diff is negative, subtract a full rotation from the start angle
 				else
 					endH += 360;
