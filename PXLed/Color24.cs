@@ -310,7 +310,7 @@ namespace PXLed
 				return Convert.ToString(c, 16);
 		}
 
-		public static implicit operator Color(Color24 c24)
+        public static implicit operator Color(Color24 c24)
 		{
 			return Color.FromRgb(c24.r, c24.g, c24.b);
 		}
@@ -328,6 +328,19 @@ namespace PXLed
 		public static bool operator !=(Color24 left, Color24 right)
 		{
 			return left.r != right.r || left.g != right.g || left.b != right.b;
+		}
+
+		public override bool Equals(object? obj)
+		{
+			return obj is Color24 color &&
+				   r == color.r &&
+				   g == color.g &&
+				   b == color.b;
+		}
+
+		public override int GetHashCode()
+		{
+			return HashCode.Combine(r, g, b);
 		}
 	}
 }
