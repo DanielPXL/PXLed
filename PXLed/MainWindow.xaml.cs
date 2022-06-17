@@ -20,8 +20,15 @@ namespace PXLed
             SettingsData settingsData = App.Config.GetData<SettingsData>();
 
             fpsCounter = new();
-            arduinoDevice = new(settingsData.ArduinoPortName, settingsData.ArduinoBaudRate);
-            ledManager = new(settingsData.NumLeds, arduinoDevice, ledPreview, fpsCounter);
+
+            // Create device
+            if (settingsData.UseWiFi)
+                device = new UdpDevice(settingsData.DeviceIP, settingsData.DevicePort);
+            else
+                device = new ArduinoDevice(settingsData.ArduinoPortName, settingsData.ArduinoBaudRate);
+            
+            ledManager = new(settingsData.NumLeds, device, ledPreview, fpsCounter);
+            StateChanged += MainWindow_StateChanged;
 
             brightnessSlider.ValueChanged += (s, e) => ledManager.brightness = (float)e.NewValue;
             brightnessSlider.Value = settingsData.Brightness;
@@ -41,7 +48,7 @@ namespace PXLed
         FPSCounter fpsCounter;
         DispatcherTimer fpsDisplayTimer;
 
-        ArduinoDevice arduinoDevice;
+        ILEDDevice device;
         LEDManager ledManager;
 
         LEDEffectData[] effects;
@@ -111,15 +118,23 @@ namespace PXLed
 
         public void RestartArduino()
         {
+            // Stop effect
             StopCurrentEffect();
 
+            // Get Settings
             SettingsData settingsData = App.Config.GetData<SettingsData>();
 
-            arduinoDevice.Dispose();
-            arduinoDevice = new ArduinoDevice(settingsData.ArduinoPortName, settingsData.ArduinoBaudRate);
+            device.Dispose();
+            
+            // Create new device
+            if (settingsData.UseWiFi)
+                device = new UdpDevice(settingsData.DeviceIP, settingsData.DevicePort);
+            else
+                device = new ArduinoDevice(settingsData.ArduinoPortName, settingsData.ArduinoBaudRate);
 
-            ledManager = new(settingsData.NumLeds, arduinoDevice, ledPreview, fpsCounter);
+            ledManager = new(settingsData.NumLeds, device, ledPreview, fpsCounter);
 
+            // Restart effect
             SetCurrentEffect(currentEffect!);
         }
 
@@ -128,11 +143,20 @@ namespace PXLed
             return Array.IndexOf(effects, currentEffect);
         }
 
+        private void MainWindow_StateChanged(object? sender, EventArgs e)
+        {
+            // Skip drawing the preview if the window is not visible to save on resources
+            if (WindowState == WindowState.Minimized)
+                ledManager.skipPreview = true;
+            else
+                ledManager.skipPreview = false;
+        }
+
         void StartFPSTimer()
         {
             fpsDisplayTimer = new DispatcherTimer();
             fpsDisplayTimer.Tick += (s, e) => DisplayFPS();
-            fpsDisplayTimer.Interval = new TimeSpan(0, 0, 1);
+            fpsDisplayTimer.Interval = new TimeSpan(0, 0, 0, 0, 250);
             fpsDisplayTimer.Start();
         }
 

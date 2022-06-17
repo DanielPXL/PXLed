@@ -50,6 +50,13 @@ namespace PXLed.Effects.Default
 
     public struct GradientEffectData
     {
+        public GradientEffectData(Gradient gradient, float speed, float zoom)
+        {
+            Gradient = gradient;
+            Speed = speed;
+            Zoom = zoom;
+        }
+
         public Gradient Gradient { get; set; } = new Gradient();
         public float Speed { get; set; } = 2f;
         public float Zoom { get; set; } = 1f;

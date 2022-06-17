@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace PXLed.Devices
 {
-    public interface ILEDDevice
+    public interface ILEDDevice : IDisposable
     {
-        public void SendColors(ref Color24[] colors, float brightness);
+        public void SendColors(ref Color24[] colors, float brightness);        
     }
 }

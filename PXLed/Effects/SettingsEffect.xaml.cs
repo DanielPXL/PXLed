@@ -20,6 +20,8 @@ namespace PXLed.Effects
         public SettingsEffect()
         {
             InitializeComponent();
+
+            useWiFiCheckBox.Click += (s, e) => UpdateControlsIfUsingWifi();
         }
 
         public string DisplayName => "Settings";
@@ -46,6 +48,11 @@ namespace PXLed.Effects
             numLedUpDown.Value = data.NumLeds;
             portNameBox.Text = data.ArduinoPortName;
             baudRateBox.Value = data.ArduinoBaudRate;
+            useWiFiCheckBox.IsChecked = data.UseWiFi;
+            ipBox.Text = data.DeviceIP;
+            portBox.Value = data.DevicePort;
+
+            UpdateControlsIfUsingWifi();
         }
 
         public void OnStop()
@@ -54,19 +61,58 @@ namespace PXLed.Effects
             {
                 NumLeds = numLedUpDown.Value,
                 ArduinoPortName = portNameBox.Text,
-                ArduinoBaudRate = baudRateBox.Value
+                ArduinoBaudRate = baudRateBox.Value,
+                UseWiFi = useWiFiCheckBox.IsChecked ?? false,
+                DeviceIP = ipBox.Text,
+                DevicePort = portBox.Value
             };
 
             App.Config.SetData(data);
+        }
+
+        void UpdateControlsIfUsingWifi()
+        {
+            // If using wifi, enable ip and port boxes and disable port name box and port box
+            if (useWiFiCheckBox.IsChecked ?? false)
+            {
+                ipBox.IsEnabled = true;
+                portBox.IsEnabled = true;
+
+                portNameBox.IsEnabled = false;
+                baudRateBox.IsEnabled = false;
+            }
+            else
+            {
+                ipBox.IsEnabled = false;
+                portBox.IsEnabled = false;
+
+                portNameBox.IsEnabled = true;
+                baudRateBox.IsEnabled = true;
+            }
         }
     }
 
     public struct SettingsData
     {
+        public SettingsData(int currentEffectIndex, double brightness, int numLeds, string arduinoPortName, int arduinoBaudRate, bool useWiFi, string deviceIp, int devicePort)
+        {
+            CurrentEffectIndex = currentEffectIndex;
+            Brightness = brightness;
+            NumLeds = numLeds;
+            ArduinoPortName = arduinoPortName;
+            ArduinoBaudRate = arduinoBaudRate;
+            UseWiFi = useWiFi;
+            DeviceIP = deviceIp;
+            DevicePort = devicePort;
+        }
+
         public int CurrentEffectIndex { get; set; } = 0;
         public double Brightness { get; set; } = 0.4d;
         public int NumLeds { get; set; } = 100;
         public string ArduinoPortName { get; set; } = "COM3";
         public int ArduinoBaudRate { get; set; } = 500000;
+        public bool UseWiFi { get; set; } = false;
+        public string DeviceIP { get; set; } = "";
+        public int DevicePort { get; set; } = 12241;
     }
 }

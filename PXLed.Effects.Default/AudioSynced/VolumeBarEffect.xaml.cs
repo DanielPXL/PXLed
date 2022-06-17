@@ -78,6 +78,13 @@ namespace PXLed.Effects.AudioSynced
 
     public struct VolumeBarEffectData
     {
+        public VolumeBarEffectData(Gradient gradient, float volume, float gravity)
+        {
+            Gradient = gradient;
+            Volume = volume;
+            Gravity = gravity;
+        }
+
         public Gradient Gradient { get; set; } = new Gradient();
         public float Volume { get; set; } = 400f;
         public float Gravity { get; set; } = 1f;
