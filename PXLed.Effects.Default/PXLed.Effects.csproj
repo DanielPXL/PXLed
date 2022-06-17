@@ -51,7 +51,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy $(TargetPath) C:\Users\Admin\source\repos\PXLed\PXLed\bin\Debug\net6.0-windows7.0\PXLed.Effects.Default.dll" />
+    <Exec Command="copy $(TargetPath) $(SolutionDir)PXLed\bin\Debug\net6.0-windows7.0\PXLed.Effects.Default.dll" />
   </Target>
 
 </Project>
