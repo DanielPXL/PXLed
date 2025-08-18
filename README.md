@@ -1,3 +1,6 @@
+# Archived
+I don't use this tool anymore since I made a better version for my specific use-case. I won't maintain this repo (the code sucks because I made this ages ago) and I don't recommend using this program. If you really need something like this, you're probably better off writing it yourself.
+
 # PXLed
 
 ## About
